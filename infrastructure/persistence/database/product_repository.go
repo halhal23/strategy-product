@@ -9,11 +9,17 @@ import (
 )
 
 type ProductRepository struct {
-	SqlHandler *sql.DB
+	Conn *sql.DB
 }
 
-func (repo *ProductRepository) Save(ctx context.Context, product model.ProductModel) *model.ProductModel {
-	result, err := repo.SqlHandler.Exec("INSERT INTO products (name, price, user_id) VALUES (?, ?, ?)", product.Name, product.Price, product.UserId)
+func NewProductRepository(conn *sql.DB) *ProductRepository {
+	return &ProductRepository{
+		Conn: conn,
+	}
+}
+
+func (repo *ProductRepository) Save(ctx *context.Context, product *model.ProductModel) (int, error) {
+	result, err := repo.Conn.Exec("INSERT INTO products (name, price, user_id) VALUES (?, ?, ?)", product.Name, product.Price, product.UserId)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
@@ -21,16 +27,11 @@ func (repo *ProductRepository) Save(ctx context.Context, product model.ProductMo
 	if err != nil {
 		fmt.Println(err.Error())
 	}
-	return &model.ProductModel{
-		ID: int(id),
-		Name: product.Name,
-		Price: product.Price,
-		UserId: product.UserId,
-	}
+	return int(id), nil
 }
 
 func (repo *ProductRepository) FindByName(ctx *context.Context, productName string) (*model.ProductModel, error) {
-	rows, err := repo.SqlHandler.Query("SELECT * FROM products WHERE name = name", productName)
+	rows, err := repo.Conn.Query("SELECT * FROM products WHERE name = name", productName)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
