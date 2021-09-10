@@ -28,3 +28,14 @@ func (repo *ProductRepository) Save(ctx context.Context, product model.ProductMo
 		UserId: product.UserId,
 	}
 }
+
+func (repo *ProductRepository) FindByName(ctx *context.Context, productName string) (*model.ProductModel, error) {
+	rows, err := repo.SqlHandler.Query("SELECT * FROM products WHERE name = name", productName)
+	if err != nil {
+		fmt.Println(err.Error())
+	}
+	rows.Next()
+	product := model.ProductModel{}
+	rows.Scan(&product.ID, &product.Name, &product.Price, &product.UserId)
+	return &product, nil
+}
