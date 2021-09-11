@@ -7,7 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/halhal23/strategy-product/domain/model"
 	"github.com/halhal23/strategy-product/infrastructure/persistence/database"
-	"github.com/halhal23/strategy-product/pkg/pb/pkg/pb"
+	"github.com/halhal23/strategy-product/pkg/pb"
 	"github.com/halhal23/strategy-product/usecase"
 	_ "google.golang.org/grpc"
 )
@@ -31,7 +31,7 @@ func (handler *ProductHandler) CreateProduct(ctx context.Context, req *pb.Create
 	}
 	var c *gin.Context
 	id, err := handler.Interactor.Add(c, &product)
-	if err == nil {
+	if err != nil {
 		return nil, err 
 	} 
 	return &pb.CreateProductResponse{
@@ -39,7 +39,7 @@ func (handler *ProductHandler) CreateProduct(ctx context.Context, req *pb.Create
 	}, nil
 }
 
-func (handler *ProductHandler) ReadByNameProduct(ctx *context.Context, req *pb.ReadByNameProductRequest) (*pb.ReadByNameProductResponse, error) {
+func (handler *ProductHandler) ReadByNameProduct(ctx context.Context, req *pb.ReadByNameProductRequest) (*pb.ReadByNameProductResponse, error) {
 	queryName := req.GetName()
 	var c *gin.Context
 	product, err := handler.Interactor.ProductByName(c, queryName)
@@ -56,7 +56,7 @@ func (handler *ProductHandler) ReadByNameProduct(ctx *context.Context, req *pb.R
 	}, nil
 }
 
-func (handler *ProductHandler) ListProduct(ctx *context.Context) (*pb.ListProductResponse, error) {
+func (handler *ProductHandler) ListProduct(ctx context.Context, req *pb.ListProductRequest) (*pb.ListProductResponse, error) {
 	var c *gin.Context
 	products, err := handler.Interactor.Products(c)
 	if err != nil {
