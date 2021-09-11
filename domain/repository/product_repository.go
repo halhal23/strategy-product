@@ -8,4 +8,5 @@ import (
 type IProductRepository interface {
 	Save(*gin.Context, *model.ProductModel) (int, error)
 	FindByName(ctx *gin.Context, name string) (product *model.ProductModel, err error)
+	FindAll(ctx *gin.Context) ([]*model.ProductModel, error)
 }

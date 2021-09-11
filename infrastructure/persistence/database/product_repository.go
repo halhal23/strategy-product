@@ -31,6 +31,21 @@ func (repo *ProductRepository) Save(ctx *gin.Context, product *model.ProductMode
 	return int(id), nil
 }
 
+func (repo *ProductRepository) FindAll(ctx *gin.Context) ([]*model.ProductModel, error) {
+	rows, err := repo.Conn.Query("SELECT * FROM products")
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var products []*model.ProductModel
+	for rows.Next() {
+		var product model.ProductModel
+		rows.Scan(&product.ID, &product.Name, &product.Price, &product.UserId)
+		products = append(products, &product)
+	}
+	return products, nil
+}
+
 func (repo *ProductRepository) FindByName(ctx *gin.Context, productName string) (*model.ProductModel, error) {
 	rows, err := repo.Conn.Query("SELECT * FROM products WHERE name = ?", productName)
 	if err != nil {

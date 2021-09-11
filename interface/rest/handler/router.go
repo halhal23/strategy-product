@@ -16,7 +16,8 @@ func NewRouter() *gin.Engine {
 	}
 	handler := NewProductHandler(conn)
 	router.GET("/", func(c *gin.Context) { c.JSON(200, "ok desune")})
-	router.GET("/products/:name",func(c *gin.Context) { handler.Show(c)})
-	router.POST("/products",func(c *gin.Context) { handler.Create(c)})
+	router.GET("/products", func(c *gin.Context) { handler.Index(c) })
+	router.GET("/products/:name",func(c *gin.Context) { handler.Show(c) })
+	router.POST("/products",func(c *gin.Context) { handler.Create(c) })
 	return router
 }

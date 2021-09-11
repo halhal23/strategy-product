@@ -19,6 +19,14 @@ func NewProductHandler(conn *sql.DB) *ProductHandler {
 	}
 }
 
+func (handler *ProductHandler) Index(ctx *gin.Context) {
+	products, err := handler.Interactor.Products(ctx)
+	if err != nil {
+		ctx.JSON(500, err.Error())
+	}
+	ctx.JSON(200, products)
+}
+
 func (handler *ProductHandler) Show(ctx *gin.Context) {
 	name := ctx.Param("name")
 	product, err := handler.Interactor.ProductByName(ctx, name)
