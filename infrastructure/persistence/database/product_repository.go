@@ -6,13 +6,14 @@ import (
 	"fmt"
 
 	"github.com/halhal23/strategy-product/domain/model"
+	"github.com/halhal23/strategy-product/domain/repository"
 )
 
 type ProductRepository struct {
 	Conn *sql.DB
 }
 
-func NewProductRepository(conn *sql.DB) *ProductRepository {
+func NewProductRepository(conn *sql.DB) repository.IProductRepository {
 	return &ProductRepository{
 		Conn: conn,
 	}
