@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+message Product {
+    int64 id = 1;
+    string name = 2;
+    int64 price = 3;
+    int64 user_id = 4;
+}
+
+message ProductInput {
+    string name = 1;
+    int64 price = 2;
+    int64 user_id = 3;
+}
+
+/*
+    Create
+*/
+message CreateProductRequest {
+    ProductInput productInput = 1;
+}
+
+message CreateProductResponse {
+    int64 id = 1;
+}
+
+/*
+    Read 
+*/
+message ReadByNameProductRequest {
+    string name = 1;
+}
+
+message ReadByNameProductResponse {
+    Product product = 1;
+}
+
+/*
+    List
+*/
+message ListProductRequest {}
+
+message ListProductResponse {
+    repeated Product product = 1;
+}
+
+service ProductService {
+    rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse) {};
+    rpc ReadByNameProduct(ReadByNameProductRequest) returns (ReadByNameProductResponse) {};
+    rpc ListProduct(ListProductRequest) returns (ListProductResponse) {};
+}
