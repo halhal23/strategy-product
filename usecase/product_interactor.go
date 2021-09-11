@@ -1,8 +1,9 @@
 package usecase
 
 import (
-	"context"
+	"fmt"
 
+	"github.com/gin-gonic/gin"
 	"github.com/halhal23/strategy-product/domain/model"
 	"github.com/halhal23/strategy-product/domain/repository"
 )
@@ -17,7 +18,7 @@ func NewProductInteractor(repo repository.IProductRepository) *ProductInteractor
 	}
 }
 
-func (interactor *ProductInteractor) Add(ctx *context.Context, product *model.ProductModel) (int, error) {
+func (interactor *ProductInteractor) Add(ctx *gin.Context, product *model.ProductModel) (int, error) {
 	id, err := interactor.Repo.Save(ctx, product)
 	if err != nil {
 		return 0, err
@@ -25,7 +26,8 @@ func (interactor *ProductInteractor) Add(ctx *context.Context, product *model.Pr
 	return id, nil
 }
 
-func (interactor *ProductInteractor) ProductByName(ctx *context.Context, name string) (*model.ProductModel, error) {
+func (interactor *ProductInteractor) ProductByName(ctx *gin.Context, name string) (*model.ProductModel, error) {
+	fmt.Println(name)
 	product, err := interactor.Repo.FindByName(ctx, name)
 	if err != nil {
 		return nil, err

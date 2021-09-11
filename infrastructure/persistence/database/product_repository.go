@@ -1,10 +1,10 @@
 package database
 
 import (
-	"context"
 	"database/sql"
 	"fmt"
 
+	"github.com/gin-gonic/gin"
 	"github.com/halhal23/strategy-product/domain/model"
 	"github.com/halhal23/strategy-product/domain/repository"
 )
@@ -19,7 +19,7 @@ func NewProductRepository(conn *sql.DB) repository.IProductRepository {
 	}
 }
 
-func (repo *ProductRepository) Save(ctx *context.Context, product *model.ProductModel) (int, error) {
+func (repo *ProductRepository) Save(ctx *gin.Context, product *model.ProductModel) (int, error) {
 	result, err := repo.Conn.Exec("INSERT INTO products (name, price, user_id) VALUES (?, ?, ?)", product.Name, product.Price, product.UserId)
 	if err != nil {
 		fmt.Println(err.Error())
@@ -31,8 +31,8 @@ func (repo *ProductRepository) Save(ctx *context.Context, product *model.Product
 	return int(id), nil
 }
 
-func (repo *ProductRepository) FindByName(ctx *context.Context, productName string) (*model.ProductModel, error) {
-	rows, err := repo.Conn.Query("SELECT * FROM products WHERE name = name", productName)
+func (repo *ProductRepository) FindByName(ctx *gin.Context, productName string) (*model.ProductModel, error) {
+	rows, err := repo.Conn.Query("SELECT * FROM products WHERE name = ?", productName)
 	if err != nil {
 		fmt.Println(err.Error())
 	}

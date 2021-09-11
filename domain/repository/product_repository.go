@@ -1,12 +1,11 @@
 package repository
 
 import (
-	"context"
-
+	"github.com/gin-gonic/gin"
 	"github.com/halhal23/strategy-product/domain/model"
 )
 
 type IProductRepository interface {
-	Save(*context.Context, *model.ProductModel) (int, error)
-	FindByName(ctx *context.Context, name string) (product *model.ProductModel, err error)
+	Save(*gin.Context, *model.ProductModel) (int, error)
+	FindByName(ctx *gin.Context, name string) (product *model.ProductModel, err error)
 }
